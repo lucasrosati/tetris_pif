@@ -12,7 +12,7 @@
 char Tabela[LINHAS][COLUNAS] = {0};
 int pontuacao = 0;
 char JogoAtivo = VERDADEIRO;
-suseconds_t temporizador = 400000; // diminua isso para acelerar o jogo
+suseconds_t temporizador = 300000; // diminua isso para acelerar o jogo
 int diminuir = 1000;
 
 typedef struct {
@@ -202,7 +202,7 @@ int main() {
                     c = getch();
                 } while (c != 'p' && c != 'P');
                 timeout(1);
-            } else if (c == 'q' || c == 'Q') {
+            } else if (c == 'l' || c == 'L') {
                 break;
             } else {
                 ManipularAtual(c);
