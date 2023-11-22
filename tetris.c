@@ -24,33 +24,47 @@ Forma atual;
 
 const Forma Tetrominos[7] = {
 
-    {(char *[]){(char []){0, 1, 1}, 
-                (char []){1, 1, 0}, 
-                (char []){0, 0, 0}}, 3}, // tetromino S
-
-    {(char *[]){(char []){1, 1, 0}, 
+    {(char *[]){
                 (char []){0, 1, 1}, 
-                (char []){0, 0, 0}}, 3}, // tetromino Z
+                (char []){1, 1, 0}, 
+                (char []){0, 0, 0}
+                }, 3}, // tetromino S
 
-    {(char *[]){(char []){0, 1, 0}, 
+    {(char *[]){
+                (char []){1, 1, 0}, 
+                (char []){0, 1, 1}, 
+                (char []){0, 0, 0}
+                }, 3}, // tetromino Z
+
+    {(char *[]){
+                (char []){0, 1, 0}, 
                 (char []){1, 1, 1}, 
-                (char []){0, 0, 0}}, 3}, // tetromino T
+                (char []){0, 0, 0}
+                }, 3}, // tetromino T
 
-    {(char *[]){(char []){0, 0, 1}, 
+    {(char *[]){
+                (char []){0, 0, 1}, 
                 (char []){1, 1, 1}, 
-                (char []){0, 0, 0}}, 3}, // tetromino L
+                (char []){0, 0, 0}
+                }, 3}, // tetromino L
 
-    {(char *[]){(char []){1, 0, 0}, 
+    {(char *[]){
+                (char []){1, 0, 0}, 
                 (char []){1, 1, 1}, 
-                (char []){0, 0, 0}}, 3}, // tetromino J
+                (char []){0, 0, 0}
+                }, 3}, // tetromino J
 
-    {(char *[]){(char []){1, 1}, 
-                (char []){1, 1}}, 2}, // tetromino O
+    {(char *[]){
+                (char []){1, 1}, 
+                (char []){1, 1}
+                }, 2}, // tetromino O
 
-    {(char *[]){(char []){0, 0, 0, 0}, 
+    {(char *[]){
+                (char []){0, 0, 0, 0},
                 (char []){1, 1, 1, 1}, 
                 (char []){0, 0, 0, 0}, 
-                (char []){0, 0, 0, 0}}, 4} // tetromino I
+                (char []){0, 0, 0, 0}
+        }, 4} // tetromino I
 };
 
 Forma CopiarForma(Forma forma) {
