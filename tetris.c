@@ -4,32 +4,53 @@
 #include <sys/time.h>
 #include <ncurses.h>
 
-#define LINHAS 20
-#define COLUNAS 15
+#define LINHAS 21
+#define COLUNAS 10
 #define VERDADEIRO 1
 #define FALSO 0
 
 char Tabela[LINHAS][COLUNAS] = {0};
 int pontuacao = 0;
-char JogoAtivo = VERDADEIRO;
+char JogoAtivo = FALSO;
 suseconds_t temporizador = 300000; // diminua isso para acelerar o jogo
-int diminuir = 1000;
+int diminuir = 7000;
 
-typedef struct {
+typedef struct Forma{
     char **matriz;
     int largura, linha, coluna;
 } Forma;
 
 Forma atual;
 
-const Forma FormasArray[7] = {
-    {(char *[]){(char []){0, 1, 1}, (char []){1, 1, 0}, (char []){0, 0, 0}}, 3},                           
-    {(char *[]){(char []){1, 1, 0}, (char []){0, 1, 1}, (char []){0, 0, 0}}, 3},                           
-    {(char *[]){(char []){0, 1, 0}, (char []){1, 1, 1}, (char []){0, 0, 0}}, 3},                           
-    {(char *[]){(char []){0, 0, 1}, (char []){1, 1, 1}, (char []){0, 0, 0}}, 3},                           
-    {(char *[]){(char []){1, 0, 0}, (char []){1, 1, 1}, (char []){0, 0, 0}}, 3},                           
-    {(char *[]){(char []){1, 1}, (char []){1, 1}}, 2},                                                   
-    {(char *[]){(char []){0, 0, 0, 0}, (char []){1, 1, 1, 1}, (char []){0, 0, 0, 0}, (char []){0, 0, 0, 0}}, 4} 
+const Forma Tetrominos[7] = {
+
+    {(char *[]){(char []){0, 1, 1}, 
+                (char []){1, 1, 0}, 
+                (char []){0, 0, 0}}, 3}, // tetromino S
+
+    {(char *[]){(char []){1, 1, 0}, 
+                (char []){0, 1, 1}, 
+                (char []){0, 0, 0}}, 3}, // tetromino Z
+
+    {(char *[]){(char []){0, 1, 0}, 
+                (char []){1, 1, 1}, 
+                (char []){0, 0, 0}}, 3}, // tetromino T
+
+    {(char *[]){(char []){0, 0, 1}, 
+                (char []){1, 1, 1}, 
+                (char []){0, 0, 0}}, 3}, // tetromino L
+
+    {(char *[]){(char []){1, 0, 0}, 
+                (char []){1, 1, 1}, 
+                (char []){0, 0, 0}}, 3}, // tetromino J
+
+    {(char *[]){(char []){1, 1}, 
+                (char []){1, 1}}, 2}, // tetromino O
+
+    {(char *[]){(char []){0, 0, 0, 0}, 
+                (char []){1, 1, 1, 1}, 
+                (char []){0, 0, 0, 0}, 
+                (char []){0, 0, 0, 0}}, 4} // tetromino I
 };
 
 Forma CopiarForma(Forma forma) {
@@ -70,7 +91,7 @@ int VerificarPosicao(Forma forma) {
 }
 
 void DefinirNovaFormaAleatoria() {
-    Forma nova_forma = CopiarForma(FormasArray[rand() % 7]);
+    Forma nova_forma = CopiarForma(Tetrominos[rand() % 7]);
 
     nova_forma.coluna = rand() % (COLUNAS - nova_forma.largura + 1);
     nova_forma.linha = 0;
@@ -121,7 +142,21 @@ void RemoverLinhasCompletasEAtualizarPontuacao() {
             temporizador -= diminuir--;
         }
     }
-    pontuacao += 100 * contador;
+    switch (contador)
+    {
+    case 1:
+        pontuacao += 120;
+        break;
+    case 2:
+        pontuacao += 300;
+        break;
+    case 3:
+        pontuacao += 900;
+        break;
+    case 4:
+        pontuacao += 3600;
+        break;
+    }
 }
 
 void ImprimirTabela() {
@@ -134,7 +169,7 @@ void ImprimirTabela() {
         }
     }
     clear();
-    for (i = 0; i < COLUNAS - 9; i++)
+    for (i = 0; i < COLUNAS - 5; i++)
         printw(" ");
     printw("PIF Tetris\n");
     for (i = 0; i < LINHAS; i++) {
@@ -144,8 +179,14 @@ void ImprimirTabela() {
         printw("\n");
     }
     printw("\nPontuação: %d\n", pontuacao);
+    printw("\nPressione 'p' para pausar ou 'l' para sair do jogo.\n");
 }
-
+void ImprimirTelaInicial(){
+    int c;
+    printw("TETRIS\n\nPressione qualquer tecla para jogar");
+    if ((c = getch()) != ERR)
+        JogoAtivo = VERDADEIRO;
+}
 void ManipularAtual(int acao) {
     Forma temp = CopiarForma(atual);
     switch (acao) {
@@ -189,6 +230,7 @@ int main() {
     pontuacao = 0;
     int c;
     initscr();
+    ImprimirTelaInicial();
     gettimeofday(&antes_agora, NULL);
     timeout(1);
     DefinirNovaFormaAleatoria();
