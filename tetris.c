@@ -15,7 +15,7 @@ int contador = 0;
 int nivel = 0;
 char JogoAtivo = FALSO;
 suseconds_t temporizador = 400000; // diminua isso para acelerar o jogo
-int diminuir = 7000;
+int diminuir = 5000;
 
 typedef struct Forma{
     char **matriz;
@@ -107,7 +107,9 @@ int VerificarPosicao(Forma forma) {
 }
 
 void DefinirProximaForma(){
-    proxima = CopiarForma(Tetrominos[rand() % 7]);
+    Forma prox_forma = CopiarForma(Tetrominos[rand() % 7]);
+    DeletarForma(proxima);
+    proxima = prox_forma;
 }
 
 void DefinirFormaAleatoria() {
@@ -165,7 +167,7 @@ void RemoverLinhasCompletasEAtualizarPontuacao() {
             temporizador -= diminuir--;
         }
     }
-    if((contador % 10 > 9))
+    if((contador + 1) % 6 == 0)
         nivel++;
 
     switch (sequencia)
@@ -207,7 +209,7 @@ void ImprimirTabela() {
             if(proxima.matriz[i][j]){
                 printw("# ");
             }else{
-                printw(". ");
+                printw("  ");
             }
         }
         printw("\n");
@@ -315,10 +317,10 @@ int main() {
         if ((c = getch()) != ERR) {
             if (c == 'p' || c == 'P') {
                 timeout(-1);
-                printw("Jogo Pausado. Pressione 'p' para continuar.");
+                printw("Jogo Pausado. Pressione 'p' para continuar. %i",contador);
                 do {
                     c = getch();
-                } while (c != 'p' && c != 'P' && c == 'l' && c == 'L');
+                } while (c != 'p' && c != 'P' && c != 'l' && c != 'L');
                 if (c == 'l' || c == 'L')
                     break;
                 timeout(1);
@@ -335,6 +337,7 @@ int main() {
         }
     }
     DeletarForma(atual);
+    DeletarForma(proxima);
     endwin();
     int i, j;
     for (i = 0; i < LINHAS; i++) {
