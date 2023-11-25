@@ -267,31 +267,32 @@ void ManipularAtual(int acao) {
 void ImprimirTelaInicial(){
     int c;
 printw ("                           TETRIS\n\n\n");
-printw("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@#                  #@#                  #@#                  #@\n");
-printw("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-printw("                     @#                  #@\n");                   
-printw("                     @#                  #@\n");                
-printw("                     @#                  #@\n");                 
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");
-printw("                     @#                  #@\n");                  
-printw("                     @@@@@@@@@@@@@@@@@@@@@@\n");                 
+printw("================================================================\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("|#                  #|#                  #|#                  #|\n");
+printw("================================================================\n");
+printw("                     |#                  #|\n");                   
+printw("                     |#                  #|\n");                
+printw("                     |#                  #|\n");                 
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");
+printw("                     |#                  #|\n");                  
+printw("                     ======================\n");                 
                     
 printw("\n\nPressione qualquer tecla para jogar");
+printw("\t\t\tBy: João Ferraz, Lucas Rosatti e Luis Melo");
     if ((c = getch()) != ERR)
         JogoAtivo = VERDADEIRO;
 }
