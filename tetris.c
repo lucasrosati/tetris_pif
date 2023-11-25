@@ -12,10 +12,10 @@
 char Tabela[LINHAS][COLUNAS] = {0};
 int pontuacao = 0;
 int contador = 0;
-int nivel = 0;
+int nivel = 1;
 char JogoAtivo = FALSO;
 suseconds_t temporizador = 400000; // diminua isso para acelerar o jogo
-int diminuir = 5000;
+int diminuir = 7000;
 
 typedef struct Forma{
     char **matriz;
@@ -164,25 +164,26 @@ void RemoverLinhasCompletasEAtualizarPontuacao() {
                     Tabela[k][l] = Tabela[k - 1][l];
             for (l = 0; l < COLUNAS; l++)
                 Tabela[k][l] = 0;
-            temporizador -= diminuir--;
+            if(contador % 5 == 0){
+                nivel++;
+                temporizador -= diminuir--;
+            }
         }
     }
-    if((contador + 1) % 6 == 0)
-        nivel++;
 
     switch (sequencia)
     {
     case 1:
-        pontuacao += 40 * (nivel + 1);
+        pontuacao += 40 * (nivel);
         break;
     case 2:
-        pontuacao += 100 * (nivel + 1);
+        pontuacao += 100 * (nivel);
         break;
     case 3:
-        pontuacao += 300 * (nivel + 1);
+        pontuacao += 300 * (nivel);
         break;
     case 4:
-        pontuacao += 1200 * (nivel + 1);
+        pontuacao += 1200 * (nivel);
         break;
     }
 
@@ -201,7 +202,7 @@ void ImprimirTabela() {
     for (i = 0; i < COLUNAS - 5; i++)
         printw(" ");
     printw("PIF Tetris\n");
-    printw("                   Nível: %i\n",nivel + 1);
+    printw("                   Nível: %i\n",nivel);
     printw("                   Seguinte:\n");
     for(i = 0; i < 2; i++){
         printw("                            ");
@@ -266,7 +267,7 @@ void ManipularAtual(int acao) {
 
 void ImprimirTelaInicial(){
     int c;
-printw ("                           TETRIS\n\n\n");
+printw ("                             TETRIS\n\n\n");
 printw("================================================================\n");
 printw("|#                  #|#                  #|#                  #|\n");
 printw("|#                  #|#                  #|#                  #|\n");
@@ -287,12 +288,11 @@ printw("                     |#                  #|\n");
 printw("                     |#                  #|\n");
 printw("                     |#                  #|\n");
 printw("                     |#                  #|\n");
-printw("                     |#                  #|\n");
-printw("                     |#                  #|\n");                  
-printw("                     ======================\n");                 
+printw("                     |#                  #|\t\tBy: João Ferraz, Lucas Rosatti e Luis Melo\n");
+printw("                     |#                  #|\n");                
+printw("                     ======================\n");               
                     
-printw("\n\nPressione qualquer tecla para jogar");
-printw("\t\t\tBy: João Ferraz, Lucas Rosatti e Luis Melo");
+printw("\n\nPressione qualquer tecla para jogar\n");
     if ((c = getch()) != ERR)
         JogoAtivo = VERDADEIRO;
 }
