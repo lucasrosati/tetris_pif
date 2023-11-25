@@ -11,8 +11,10 @@
 
 char Tabela[LINHAS][COLUNAS] = {0};
 int pontuacao = 0;
+int contador = 0;
+int nivel = 0;
 char JogoAtivo = FALSO;
-suseconds_t temporizador = 300000; // diminua isso para acelerar o jogo
+suseconds_t temporizador = 400000; // diminua isso para acelerar o jogo
 int diminuir = 7000;
 
 typedef struct Forma{
@@ -21,9 +23,9 @@ typedef struct Forma{
 } Forma;
 
 Forma atual;
+Forma proxima;
 
 const Forma Tetrominos[7] = {
-
     {(char *[]){
                 (char []){0, 1, 1}, 
                 (char []){1, 1, 0}, 
@@ -104,24 +106,30 @@ int VerificarPosicao(Forma forma) {
     return VERDADEIRO;
 }
 
-void DefinirNovaFormaAleatoria() {
-    Forma nova_forma = CopiarForma(Tetrominos[rand() % 7]);
+void DefinirProximaForma(){
+    proxima = CopiarForma(Tetrominos[rand() % 7]);
+}
+
+void DefinirFormaAleatoria() {
+    Forma nova_forma = CopiarForma(proxima);
 
     nova_forma.coluna = rand() % (COLUNAS - nova_forma.largura + 1);
     nova_forma.linha = 0;
     DeletarForma(atual);
     atual = nova_forma;
+
     if (!VerificarPosicao(atual)) {
         JogoAtivo = FALSO;
     }
 }
+
 
 void RotacionarForma(Forma forma) {
     Forma temp = CopiarForma(forma);
     int i, j, k, largura;
     largura = forma.largura;
     for (i = 0; i < largura; i++) {
-        for (j = 0, k = largura - 1; j < largura; j++, k--) {
+        for (j = 0, k = largura - 1; j < largura; j++, k--){
             forma.matriz[i][j] = temp.matriz[k][i];
         }
     }
@@ -139,13 +147,14 @@ void EscreverNaTabela() {
 }
 
 void RemoverLinhasCompletasEAtualizarPontuacao() {
-    int i, j, soma, contador = 0;
+    int i, j, soma, sequencia = 0;
     for (i = 0; i < LINHAS; i++) {
         soma = 0;
         for (j = 0; j < COLUNAS; j++) {
             soma += Tabela[i][j];
         }
         if (soma == COLUNAS) {
+            sequencia++;
             contador++;
             int l, k;
             for (k = i; k >= 1; k--)
@@ -156,21 +165,25 @@ void RemoverLinhasCompletasEAtualizarPontuacao() {
             temporizador -= diminuir--;
         }
     }
-    switch (contador)
+    if((contador % 10 > 9))
+        nivel++;
+
+    switch (sequencia)
     {
     case 1:
-        pontuacao += 120;
+        pontuacao += 40 * (nivel + 1);
         break;
     case 2:
-        pontuacao += 300;
+        pontuacao += 100 * (nivel + 1);
         break;
     case 3:
-        pontuacao += 900;
+        pontuacao += 300 * (nivel + 1);
         break;
     case 4:
-        pontuacao += 3600;
+        pontuacao += 1200 * (nivel + 1);
         break;
     }
+
 }
 
 void ImprimirTabela() {
@@ -186,21 +199,35 @@ void ImprimirTabela() {
     for (i = 0; i < COLUNAS - 5; i++)
         printw(" ");
     printw("PIF Tetris\n");
+    printw("                   Nível: %i\n",nivel + 1);
+    printw("                   Seguinte:\n");
+    for(i = 0; i < 2; i++){
+        printw("                            ");
+        for(j = 0; j < proxima.largura; j++){
+            if(proxima.matriz[i][j]){
+                printw("# ");
+            }else{
+                printw(". ");
+            }
+        }
+        printw("\n");
+    }
+    printw("\n");
     for (i = 0; i < LINHAS; i++) {
         for (j = 0; j < COLUNAS; j++) {
-            printw("%c ", (Tabela[i][j] + Buffer[i][j]) ? '#' : '.');
+            if (Tabela[i][j] + Buffer[i][j]){
+                printw("# ");
+            }else{
+                printw(". ");
+            }
         }
         printw("\n");
     }
     printw("\nPontuação: %d\n", pontuacao);
     printw("\nPressione 'p' para pausar ou 'l' para sair do jogo.\n");
 }
-void ImprimirTelaInicial(){
-    int c;
-    printw("TETRIS\n\nPressione qualquer tecla para jogar");
-    if ((c = getch()) != ERR)
-        JogoAtivo = VERDADEIRO;
-}
+
+
 void ManipularAtual(int acao) {
     Forma temp = CopiarForma(atual);
     switch (acao) {
@@ -211,7 +238,8 @@ void ManipularAtual(int acao) {
         else {
             EscreverNaTabela();
             RemoverLinhasCompletasEAtualizarPontuacao();
-            DefinirNovaFormaAleatoria();
+            DefinirFormaAleatoria();
+            DefinirProximaForma();
         }
         break;
     case 'd':
@@ -234,7 +262,40 @@ void ManipularAtual(int acao) {
     ImprimirTabela();
 }
 
+void ImprimirTelaInicial(){
+    int c;
+printw ("                           TETRIS\n\n\n");
+printw("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@#                  #@#                  #@#                  #@\n");
+printw("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+printw("                     @#                  #@\n");                   
+printw("                     @#                  #@\n");                
+printw("                     @#                  #@\n");                 
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");
+printw("                     @#                  #@\n");                  
+printw("                     @@@@@@@@@@@@@@@@@@@@@@\n");                 
+                    
+printw("\n\nPressione qualquer tecla para jogar");
+    if ((c = getch()) != ERR)
+        JogoAtivo = VERDADEIRO;
+}
+
 struct timeval antes_agora, agora;
+
 int precisaAtualizar() {
     return ((suseconds_t)(agora.tv_sec * 1000000 + agora.tv_usec) - ((suseconds_t)antes_agora.tv_sec * 1000000 + antes_agora.tv_usec)) > temporizador;
 }
@@ -247,7 +308,8 @@ int main() {
     ImprimirTelaInicial();
     gettimeofday(&antes_agora, NULL);
     timeout(1);
-    DefinirNovaFormaAleatoria();
+    DefinirProximaForma();
+    DefinirFormaAleatoria();
     ImprimirTabela();
     while (JogoAtivo) {
         if ((c = getch()) != ERR) {
@@ -256,7 +318,9 @@ int main() {
                 printw("Jogo Pausado. Pressione 'p' para continuar.");
                 do {
                     c = getch();
-                } while (c != 'p' && c != 'P');
+                } while (c != 'p' && c != 'P' && c == 'l' && c == 'L');
+                if (c == 'l' || c == 'L')
+                    break;
                 timeout(1);
             } else if (c == 'l' || c == 'L') {
                 break;
@@ -275,7 +339,11 @@ int main() {
     int i, j;
     for (i = 0; i < LINHAS; i++) {
         for (j = 0; j < COLUNAS; j++) {
-            printf("%c ", Tabela[i][j] ? '#' : '.');
+            if (Tabela[i][j]){
+                printf("# ");
+            }else{
+                printf(". ");
+            }
         }
         printf("\n");
     }
